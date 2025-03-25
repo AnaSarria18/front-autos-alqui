@@ -12,13 +12,11 @@ class MenuPrincipal extends StatefulWidget {
 
 class _MenuPrincipalState extends State<MenuPrincipal> {
   final AutosController autosController = AutosController();
-  List<Map<String, dynamic>> listaDeAutos =
-      []; //En ésta lista se almacenan los autos que viene de la API
+  List<Map<String, dynamic>> listaDeAutos = []; //En ésta lista se almacenan los autos que viene de la API
   bool isLoading = true; //Indicador de progreso de carga
 
   @override
-  void initState() {
-    //llamar al método de cargarAutos() cada vez que la pantalla se crea
+  void initState(){ //llamar al método de cargarAutos() cada vez que la pantalla se crea
     super.initState();
     // Cargar los autos desde la API
     cargarAutos();
@@ -31,17 +29,18 @@ class _MenuPrincipalState extends State<MenuPrincipal> {
         listaDeAutos = autos;
         isLoading = false;
       });
-    } catch (e) {
+    }catch (e) {
       setState(() {
         isLoading = false;
       });
       print('error al cargar autos: $e');
     }
-  }
+
+  } 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(  
       drawer: const MenuDrawerPerfil(),
       appBar: AppBar(
         title: const Text('Alquiler de Vehículos'),
@@ -68,44 +67,39 @@ class _MenuPrincipalState extends State<MenuPrincipal> {
             // Lista de vehículos
             Expanded(
               child: isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : listaDeAutos.isEmpty
-                      ? const Center(
-                          child: Text("No hay vehículos disponibles"))
-                      : ListView.builder(
-                          itemCount: listaDeAutos.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              leading: Image.network(
-                                listaDeAutos[index]['imageUrl'],
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              ),
-                              title: Text(
-                                  '${listaDeAutos[index]['marca']} ${listaDeAutos[index]['modelo']}'),
-                              subtitle: Text(
-                                  'año: ${listaDeAutos[index]['anio']} - ${listaDeAutos[index]['ValorAlquiler']}'),
-                              trailing: Icon(Icons.arrow_forward_ios,
-                                  color: Colors.red[300]),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DetalleVehiculoScreen(
-                                      imageUrl: listaDeAutos[index]['imageUrl'],
-                                      marca: listaDeAutos[index]['marca'],
-                                      modelo: listaDeAutos[index]['modelo'],
-                                      anio: listaDeAutos[index]['anio'],
-                                      disponibilidad: listaDeAutos[index]
-                                          ['disponibilidad'],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
+              ? const Center(child: CircularProgressIndicator())
+              : listaDeAutos.isEmpty
+              ? const Center(child: Text("No hay vehículos disponibles"))
+              :ListView.builder(
+                itemCount: listaDeAutos.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: Image.network(
+                      listaDeAutos[index]['imageUrl'],
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text('${listaDeAutos[index]['marca']} ${listaDeAutos[index]['modelo']}'),
+                    subtitle: Text('año: ${listaDeAutos[index]['anio']} - ${listaDeAutos[index]['ValorAlquiler']}'),
+                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.red[300]),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetalleVehiculoScreen(
+                            imageUrl: listaDeAutos[index]['imageUrl'],
+                            marca: listaDeAutos[index]['marca'],
+                            modelo: listaDeAutos[index]['modelo'],
+                            anio: listaDeAutos[index]['anio'],
+                            disponibilidad: listaDeAutos[index]['disponibilidad'],
+                          ),
                         ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
