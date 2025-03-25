@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AlquilerService {
-  final String baseUrl = 'https://backe-fluute-aut.onrender.com';
+  final String baseUrl = 'https://backend-alquiler-autos-rz0d.onrender.com/api/alquiler';
 
   Future<Map<String, dynamic>> registrarAlquiler(
       int clienteId, int autoId, String fechaInicio, String fechaFin) async {

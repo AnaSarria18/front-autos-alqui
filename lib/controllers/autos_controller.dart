@@ -2,35 +2,43 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AutosController {
-  final String baseUrl = "https://backe-fluute-aut.onrender.com";
+  final String baseUrl = 'https://backend-alquiler-autos-rz0d.onrender.com/api/autos';
 
-  // Método para obtener los vehículos disponibles
-  Future<List<Map<String, dynamic>>> obtenerAutosDisponibles() async { 
-    //Retornando una lista de mapas
+  // Método para obtener vehículos disponibles
+  Future<List<Map<String, dynamic>>> obtenerAutosDisponibles() async {
     try {
-      //Utilizar el método con las funciones para detectar errores
-      final url = Uri.parse('$baseUrl/');
+      final url = Uri.parse(baseUrl);
       final response = await http.get(url);
+      print('Response Status Code: ${response.statusCode}'); // Depuración
+      print('Response Body: ${response.body}'); // Depuración
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
+        
+        print('Número de autos recibidos: ${data.length}'); // Depuración
 
         // Convertir los datos a una lista de mapas
-        return data.map((auto) { //Me permite mapear los datos que los recorre de la vista de Autos
+        final autos = data.map((auto) {
+          print('Auto individual: $auto'); // Depuración de cada auto
           return {
-            'marca': auto["marca"],
-            'modelo': auto["modelo"],
-            'imageUrl': auto["imagen"] ?? 'http://autos.placeholder.com/21',
-            'ValorAlquiler': auto["valorAlquiler"], // Verifica el nombre en la API
-            'Anio': auto["anio"], 
-            'disponibilidad': auto["disponibilidad"],
+            'id': auto['id'],
+            'marca': auto['marca'] ?? 'Desconocida',
+            'modelo': auto['modelo'] ?? 'Desconocido',
+            'anio': auto['anio'] ?? 'N/A',
+            'disponibilidad': auto['disponibilidad'] ?? false,
+            'imageUrl': auto['imagen'] ?? 'https://via.placeholder.com/150',
+            'precio': auto['valorAlquiler'] != null
+                ? '\$${auto['valorAlquiler']}/día'
+                : 'Precio no disponible'
           };
         }).toList();
+        print('Autos mapeados: $autos'); // Depuración
+        return autos;
       } else {
-        throw Exception("Error al obtener los autos: ${response.statusCode}");
+        throw Exception('Error al obtener vehículos: Código ${response.statusCode}');
       }
     } catch (e) {
-      print("Error al obtener Autos: $e");
+      print('Error al obtener Autos Disponibles: $e');
       return [];
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_alquiler_autos/views/medioPago.dart';
+import 'package:flutter/material.dart';
 
 class DetalleVehiculoScreen extends StatelessWidget {
   final String imageUrl;
@@ -7,6 +8,9 @@ class DetalleVehiculoScreen extends StatelessWidget {
   final String modelo;
   final String anio;
   final int disponibilidad;
+  final int autoId;
+  final int clienteId;
+
 
   const DetalleVehiculoScreen({super.key, 
     required this.imageUrl,
@@ -14,6 +18,8 @@ class DetalleVehiculoScreen extends StatelessWidget {
     required this.modelo,
     required this.anio,
     required this.disponibilidad,
+    required this.autoId,
+    required this.clienteId,
   });
 
   @override
